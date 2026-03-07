@@ -43,5 +43,4 @@ exercism () {
 eval "$(mise activate zsh)"
 [[ $commands[kubectl] ]] && source ~/.zsh_kubectl_completion
 eval "$(gh copilot alias -- zsh)"
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 eval "$(starship init zsh)"
