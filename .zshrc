@@ -37,6 +37,8 @@ exercism () {
     fi
 }
 
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # --- Tool init (order matters) ---
 [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
 [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
