@@ -22,6 +22,7 @@ fi
 # 2. Brew packages
 # ---------------------------------------------------------------------------
 BREW_PACKAGES=(mise starship gh git-lfs pnpm)
+BREW_CASKS=(claude)
 
 for pkg in "${BREW_PACKAGES[@]}"; do
   if brew list --formula "$pkg" &>/dev/null; then
@@ -29,6 +30,15 @@ for pkg in "${BREW_PACKAGES[@]}"; do
   else
     info "Installing $pkg..."
     brew install "$pkg"
+  fi
+done
+
+for cask in "${BREW_CASKS[@]}"; do
+  if brew list --cask "$cask" &>/dev/null; then
+    success "$cask already installed"
+  else
+    info "Installing $cask..."
+    brew install --cask "$cask"
   fi
 done
 
@@ -128,6 +138,35 @@ for file in "${SYMLINKS[@]}"; do
     fi
     ln -sf "$source" "$target"
     success "Symlinked $file"
+  fi
+done
+
+# ---------------------------------------------------------------------------
+# 9. Claude Code: agents and skills
+# ---------------------------------------------------------------------------
+CLAUDE_DIRS=(
+  "agents"
+  "skills"
+)
+
+for dir in "${CLAUDE_DIRS[@]}"; do
+  target="$HOME/.claude/$dir"
+  source="$DOTFILES/.claude/$dir"
+
+  if [[ ! -d "$source" ]]; then
+    warn "$source not found in dotfiles — skipping"
+    continue
+  fi
+
+  if [[ -L "$target" && "$(readlink "$target")" == "$source" ]]; then
+    success ".claude/$dir already symlinked"
+  else
+    if [[ -d "$target" && ! -L "$target" ]]; then
+      info "Backing up existing .claude/$dir to ${target}.bak"
+      mv "$target" "${target}.bak"
+    fi
+    ln -sf "$source" "$target"
+    success "Symlinked .claude/$dir"
   fi
 done
 
